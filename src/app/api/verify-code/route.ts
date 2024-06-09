@@ -16,27 +16,25 @@ export async function POST(request: Request) {
 
         const { username, code } = await request.json()
 
-        // const codeResult = VerifyQuerySchema.safeParse(
-        //     {
-        //         code
-        //     }
-        // )
+        const codeResult = VerifyQuerySchema.safeParse({
+            code : {code}
+        })
 
-        // if (!codeResult.success) {
+        if (!codeResult.success) {
 
 
-        //     const ErrMessage = codeResult.error.format().code?._errors;
+            console.log(codeResult.error)
+            const ErrMessage = codeResult.error.errors[0].message
+
+            return Response.json({
+                success: false,
+                message: ErrMessage ? ErrMessage : "Invalid code"
+            }, {
+                status: 400
+            })
 
 
-        //     return Response.json({
-        //         success: false,
-        //         message: ErrMessage ? ErrMessage : "Invalid code"
-        //     }, {
-        //         status: 400
-        //     })
-
-
-        // }
+        }
 
         const decodedUsername = decodeURIComponent(username)
 
